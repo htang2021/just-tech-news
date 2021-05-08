@@ -30,7 +30,10 @@ router.get('/', (req, res) => {
       .then(dbPostData => {
         // pass a single post object into the homepage template
         const posts = dbPostData.map(post => post.get({ plain: true }));
-        res.render('homepage', { posts });
+        res.render('homepage', { 
+          posts,
+        loggedIn: req.session.loggedIn
+        });
       })
       .catch(err => {
         console.log(err);
@@ -56,7 +59,7 @@ router.get('/post/:id', (req, res) => {
             'post_url',
             'title',
             'created_at',
-            [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id=vote.post.id)'), 'vote_count']
+            [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'), 'vote_count']
         ],
         include: [
             {
@@ -82,12 +85,14 @@ router.get('/post/:id', (req, res) => {
         const post = dbPostData.get({ plain: true });
 
         // poass data to template
-        res.render('single-post', { post });
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
+        res.render('single-post', { 
+          post,
+          loggedIn: req.session.loggedIn });
     });
+    // .catch(err => {
+    //     console.log(err);
+    //     res.status(500).json(err);
+    // });
 });
 
 module.exports = router;
