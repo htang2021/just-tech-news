@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { Post, User, Vote, Comment } = require('../../models');
 const sequelize = require('../../config/connection');
-const { update } = require('../../models/User');
+// const { update } = require('../../models/User'); // not in snapshot code
 
 // get all users
 router.get('/', (req, res) => {
@@ -70,16 +70,19 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    Post.create({
-        title: req.body.title,
-        post_url: req.body.post_url,
-        user_id: req.body.user_id
-    })
-    .then(dbPostData => res.json(dbPostData))
-    .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
-    });
+    if (req.session) {
+        Post.create({
+            title: req.body.title,
+            post_url: req.body.post_url,
+            // user_id: req.body.user_id  // delta from snapshot code below
+            user_id: req.session.user_id  // from snapshot code
+        })
+        .then(dbPostData => res.json(dbPostData))
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
+    }
 });
 
 // PUT /api/posts/upvote

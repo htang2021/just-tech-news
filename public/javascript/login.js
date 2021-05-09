@@ -15,7 +15,8 @@ async function loginFormHandler(event) {
         });
         // check the response status
         if (response.ok) {
-            console.log('success');
+            // console.log('success');  // commented out after snapshot comparison
+            document.location.replace('/');  // from snapshot
         } else {
             alert(response.statusText);
         }
@@ -41,7 +42,8 @@ async function signupFormHandler(event) {
         });
         // check the response status
         if (response.ok) {
-            console.log('success');
+            // console.log('success');
+            document.location.replace('/'); // from snapshot
         } else {
             alert(response.statusText);
         }
