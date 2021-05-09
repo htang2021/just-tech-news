@@ -16,7 +16,7 @@ async function loginFormHandler(event) {
         // check the response status
         if (response.ok) {
             // console.log('success');  // commented out after snapshot comparison
-            document.location.replace('/');  // from snapshot
+            document.location.replace('/dashboard');  // from snapshot
         } else {
             alert(response.statusText);
         }
